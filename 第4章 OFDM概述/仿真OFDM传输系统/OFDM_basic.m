@@ -42,7 +42,7 @@ for i=0:length(EbN0)
    Ntb=0; % Initialize the number of error/total bits
    for m=1:N_iter
       % Tx______________________________________________________________
-      X= randint(1,Nused*Nframe,M); % bit: integer vector
+      X= randsrc(1,Nused*Nframe,0:1:M-1); % bit: integer vector
       Xmod= qammod(X,M,0,'gray')/norms(Nbps);
       if NgType~=2
           x_GI=zeros(1,Nframe*Nsym);
