@@ -1,5 +1,8 @@
 % OFDM_basic.m
-clear all
+clc;
+clear;
+close all;
+
 NgType=1; % NgType=1/2 for cyclic prefix/zero padding
 if NgType==1
     nt='CP';  
@@ -43,7 +46,7 @@ for i=0:length(EbN0)
    for m=1:N_iter
       % Tx______________________________________________________________
       X= randsrc(1,Nused*Nframe,0:1:M-1); % bit: integer vector
-      Xmod= qammod(X,M,0,'gray')/norms(Nbps);
+      Xmod= qammod(X,M,'gray')/norms(Nbps);
       if NgType~=2
           x_GI=zeros(1,Nframe*Nsym);
        elseif NgType==2
@@ -70,7 +73,7 @@ for i=0:length(EbN0)
       if Ch==0
           y= x_GI;  % No channel
       else  % Multipath fading channel
-        channel=(randn(1,Ntap)+j*randn(1,Ntap)).*sqrt(Power/2);
+        channel=(randn(1,Ntap)+1i*randn(1,Ntap)).*sqrt(Power/2);
         h=zeros(1,Lch);
         h(Delay+1)=channel; % cir: channel impulse response
         y = conv(x_GI,h); 
@@ -83,7 +86,7 @@ for i=0:length(EbN0)
       % Add AWGN noise________________________________________________
       snr = EbN0(i)+10*log10(Nbps*(Nused/Nfft)); % SNR vs. Eb/N0
       noise_mag = sqrt((10.^(-snr/10))*sigPow/2);
-      y_GI = y + noise_mag*(randn(size(y))+j*randn(size(y)));
+      y_GI = y + noise_mag*(randn(size(y))+1i*randn(size(y)));
       % Rx_____________________________________________________________
       kk1=(NgType==2)*Ng+[1:Nsym];
       kk2=1:Nfft;
@@ -108,7 +111,7 @@ for i=0:length(EbN0)
          kk4=kk4+Nfft; 
          kk5=kk5+Nfft;
       end
-      X_r=qamdemod(Xmod_r*norms(Nbps),M,0,'gray');
+      X_r=qamdemod(Xmod_r*norms(Nbps),M,'gray');
       Neb=Neb+sum(sum(de2bi(X_r,Nbps)~=de2bi(X,Nbps)));
       Ntb=Ntb+Nused*Nframe*Nbps;  %[Ber,Neb,Ntb]=ber(bit_Rx,bit,Nbps); 
       if Neb>Target_neb
