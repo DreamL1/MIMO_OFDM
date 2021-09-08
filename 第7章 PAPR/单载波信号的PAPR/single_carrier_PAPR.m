@@ -1,16 +1,18 @@
 %single_carrier_PAPR.m
 
-%MIMO-OFDM Wireless Communications with MATLAB¢ç   Yong Soo Cho, Jaekwon Kim, Won Young Yang and Chung G. Kang
+%MIMO-OFDM Wireless Communications with MATLABï¿½ï¿½   Yong Soo Cho, Jaekwon Kim, Won Young Yang and Chung G. Kang
 %2010 John Wiley & Sons (Asia) Pte Ltd
+clc;
+clear;
+close all;
 
-clear
 Ts = 1; Nos = 8; Fc = 1;  bits = [1 2 4]; %bits=2;
 for i_b = 1:length(bits)
    b = bits(i_b); 
    M = 2^b;
    if b==1
        Mod='BPSK'; 
-       mod_object = modem.pskmod('M',M); A=1;
+       mod_object = pskmod('M',M); A=1;
     elseif b==2
         Mod='QPSK'; 
         mod_object = modem.pskmod('M',M,'PhaseOffset',pi/4); 
